@@ -1,6 +1,7 @@
 const express = require("express")
 const bodyparser = require("body-parser")
 const path = require("path")
+const cors = require("cors")
 
 
 //connexion to the database
@@ -12,6 +13,9 @@ require("./src/models/index.database")()
 let app = express()
 
 const http = require("http").createServer(app)
+
+//allow cors
+app.use(cors())
 
 //set socket controller
 

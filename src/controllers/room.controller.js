@@ -80,15 +80,19 @@ class Room{
         if(items){
             const Room =require("../models/schemas/Rooms")
             let rooms_with_name = []
-            items.forEach((item) => {
+            items.map((item,i) => {
               Room.findById(item.room_id).exec(function(err,room){
                 if(room){
                   rooms_with_name.push({room_id:room._id,room_name:room.roomname})
                 }
+                if(i === (items.length-1)){
+                  socket.emit("all_rooms",rooms_with_name)
+      
+                }
               })
             });
 
-          socket.emit("all_rooms",rooms_with_name)
+
         }
       })
     }

@@ -66,7 +66,7 @@
   <body>
 <div class="container">
   <select id="roomList" name="">
-    
+
   </select>
   <div id="message-area">
 
@@ -94,15 +94,25 @@ var i = io()
       }
 
   })
+  document.getElementById('roomList').addEventListener("change",function(e){
+    const newRoom = e.target.value
+    console.log("NewRoom")
+    if(newRoom){
+      document.getElementById('message-area').innerHTML =""
+      i.emit("get_messages",{room_id:newRoom})
+    }
+  })
+
   i.on("all_rooms",function(rooms){
     if(!rooms){
       alert("Une errreu s'est produit")
     }else{
-      rooms.messages.forEach((item) => {
+      console.log(rooms);
+      rooms.forEach((item) => {
         var option =  document.createElement("option")
         option.value=item.room_id
-        option.innerHTML=item.roomname
-        document.getElementById('id').append(option)
+        option.innerHTML=item.room_name
+        document.getElementById('roomList').append(option)
       });
     }
   })

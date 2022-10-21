@@ -1,7 +1,7 @@
 class Message{
 
   newMessage(io,socket,msg){
-
+    
       const Message =require("../models/schemas/Messages")
       const newmsg = new Message({
         user_id:msg.user_id,
@@ -10,7 +10,11 @@ class Message{
         message_type:"text"
       })
       newmsg.save(function(err){
-        console.log(msg)
+        if(err){
+            console.log(err)
+        }else{
+            console.log(msg)
+        }
         io.emit("msg_receive",{message:msg.message})
       })
 
