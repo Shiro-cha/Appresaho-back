@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>AppResaho</title>
+  </head>
+<script type="text/javascript" src="/client-dist/socket.io.js">
+
+</script>
+  <style media="screen">
+    body{
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .container{
+      position:relative;
+      width:300px;
+      height:400px;
+      border:3px solid #606060;
+      padding: 20px 30px;
+    }
+    #action-area{
+      position:absolute;
+      bottom:20px;
+      left:30px;
+      right: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .msg{
+      display: block;
+      background: #909090;
+      color:#303030;
+      border-radius: 34px;
+      padding:10px 15px;
+    }
+    .msg.me{
+      background: #90ff90;
+      color:#303030;
+    }
+    textarea{
+      background: #daddad;
+      border-radius: 15px;
+      border: none !important;
+    }
+    button[type="submit"]{
+      background: #259645;
+      padding: 10px 20px;
+      color:#DEDEDE;
+      border-radius: 10px;
+      border:none;
+      cursor: pointer;
+    }
+    #message-area{
+      height:300px;
+      overflow-y: auto;
+    }
+  </style>
+  <body>
+<div class="container">
+  <select id="roomList" name="">
+    
+  </select>
+  <div id="message-area">
+
+
+
+  </div>
+<form id="action-area">
+  <textarea name="name" id="message-text" placeholder="Ecrire votre message"></textarea>
+<button type="submit" name="button" >Envoyer</button>
+</form>
+</div>
+<script>
+var i = io()
+  window.onload=function(e){
+
+    i.emit("get_messages",{room_id:"6351a23f35528899da208e68"})
+    i.emit("get_rooms",{user_id:"63515a57c5bea2c4259c97b9"})
+    document.getElementById('action-area').addEventListener("submit",function(e){
+      e.preventDefault()
+      const msg_value = document.getElementById(("message-text")).value
+      if(msg_value.trim()){
+        i.emit("msg_send",{user_id:"63515a57c5bea2c4259c97b9",room_id:"6351a23f35528899da208e68",message:msg_value})
+        document.getElementById(("message-text")).value=""
+
+      }
+
+  })
+  i.on("all_rooms",function(rooms){
+    if(!rooms){
+      alert("Une errreu s'est produit")
+    }else{
+      rooms.messages.forEach((item) => {
+        var option =  document.createElement("option")
+        option.value=item.room_id
+        option.innerHTML=item.roomname
+        document.getElementById('id').append(option)
+      });
+    }
+  })
+  i.on("all_msg",function(msg){
+    if(!msg.messages){
+      alert("Une errreu s'est produit")
+    }else{
+      msg.messages.forEach((item) => {
+        document.getElementById('message-area').innerHTML += `<p class="msg">${item.message}</p>`
+      });
+
+    }
+  })
+  i.on("msg_receive",function(msg){
+    console.log(msg)
+    document.getElementById('message-area').innerHTML += `<p class="msg">${msg.message}</p>`
+})
+  }
+
+</script>
+  </body>
+</html>

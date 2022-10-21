@@ -18,10 +18,6 @@ const UserScheme = require("mongoose").Schema({
   password:{
     type:String,
     required:true
-  },
-  is_verified:{
-    type:String,
-    required:true
   }
 })
 
