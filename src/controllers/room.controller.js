@@ -76,16 +76,19 @@ class Room{
   getRooms(io,socket,msg){
     const User_In_Room =require("../models/schemas/User_In_Room")
     if(msg.user_id){
-      User_In_Room.find({user_id:msg.user_id}).exec(function(err,items){
+     
+     User_In_Room.find({user_id:msg.user_id}).exec(function(err,items){
         if(items){
             const Room =require("../models/schemas/Rooms")
             let rooms_with_name = []
+            
             items.map((item,i) => {
               Room.findById(item.room_id).exec(function(err,room){
                 if(room){
                   rooms_with_name.push({room_id:room._id,room_name:room.roomname})
                 }
                 if(i === (items.length-1)){
+                   console.log(rooms_with_name)
                   socket.emit("all_rooms",rooms_with_name)
       
                 }

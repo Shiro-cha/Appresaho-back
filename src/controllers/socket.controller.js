@@ -21,7 +21,7 @@ const io = new Server(http, {
       require("./message.controller").getMessages(io,socket,msg)
     })
     socket.on("get_rooms",function(msg){
-
+       
       require("./room.controller").getRooms(io,socket,msg)
     })
   })
